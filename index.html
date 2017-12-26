@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+</head>
+
+<body>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+    var width = 600;
+    var height = 300;
+
+    var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+    var y = d3.scale.linear().range([height, 0]);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g");
+
+    var data = [
+        {date: '2013-01', value: 53},
+        {date: '2013-02', value: 165},
+        {date: '2013-03', value: 269},
+        {date: '2013-04', value: 344},
+        {date: '2013-05', value: 376},
+        {date: '2013-06', value: 410},
+        {date: '2013-07', value: 421},
+        {date: '2013-08', value: 405},
+        {date: '2013-09', value: 376},
+        {date: '2013-10', value: 359},
+        {date: '2013-11', value: 392},
+        {date: '2013-12', value: 433},
+        {date: '2014-01', value: 455},
+        {date: '2014-02', value: 478},
+    ];
+
+    var data2 = [
+
+        {date: '2013-01', value: 11},
+        {date: '2013-02', value: 222},
+        {date: '2013-03', value: 123},
+        {date: '2013-04', value: 1},
+        {date: '2013-05', value: 23},
+        {date: '2013-06', value: 232},
+        {date: '2013-07', value: 43},
+        {date: '2013-08', value: 45},
+        {date: '2013-09', value: 65},
+        {date: '2013-10', value: 67},
+        {date: '2013-11', value: 78},
+        {date: '2013-12', value: 98},
+        {date: '2014-01', value: 112},
+        {date: '2014-02', value: 116},
+
+    ];
+
+    x.domain(data.map(function (d) {
+        return d.date;
+    }));
+
+    y.domain([0, d3.max(data, function (d) {
+        return d.value;
+    })]);
+
+    svg.selectAll("rect")
+        .data(data2)
+        .enter().append("rect")
+        .style("fill", "steelblue")
+        .attr("x", function (d) {
+            return x(d.date);
+        })
+        .attr("width", x.rangeBand())
+        .attr("y", height)
+        .attr("height", 0)
+        .transition()
+        .duration(500)
+        .attr('height', function (d) {
+            return y(d.value)
+        })
+        .attr("y", function (d) {
+            return height - y(d.value);
+        });
+
+    setTimeout(function () {
+        var bars = svg.selectAll("rect");
+        bars.data(data)
+            .enter();
+        bars.transition()
+            .duration(500)
+            .attr("height", function (d) {
+                return y(d.value);
+            })
+            .attr("y", function (d) {
+                return height - y(d.value);
+            })
+
+    }, 1000)
+
+
+</script>
+
+</body>
